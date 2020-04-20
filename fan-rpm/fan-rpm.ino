@@ -2,8 +2,7 @@
 //code by Crenn from http://thebestcasescenario.com  thank you!
 //Varibles used for calculations
 int NbTopsFan;
-int calc1;
-int calc2;
+int calc;
 
 //The pin location of the sensor
 int hallsensor = 2; 
@@ -52,16 +51,12 @@ void loop ()
  
     //Times NbTopsFan (which is apprioxiamately the fequency the fan 
     //is spinning at) by 60 seconds before dividing by the fan's divider
-    calc1 = ((NbTopsFan * 60) / fanspace[fan].fandiv);
-    calc2 = ((NbTopsFan * 60) / fanspace[2].fandiv); 
+    calc = ((NbTopsFan * 60) / fanspace[fan].fandiv);
 
     if (Serial.available()) { 
         //Prints the number calculated above
-        Serial.print("calc1 = ");
-        Serial.print(calc1, DEC);
-        Serial.println (" rpm");
-        Serial.print("calc2 = ");
-        Serial.print (calc2, DEC);
+        Serial.print("calc = ");
+        Serial.print (calc, DEC);
         Serial.println (" rpm");
     }
 } 
