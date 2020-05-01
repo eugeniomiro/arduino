@@ -10,8 +10,8 @@ void loop() {
   int btn = digitalRead(btnPin);
 
   if (btn == LOW) {
-    digitalWrite(ledPin, HIGH);
+    PORTD = B00100000;
   } else {
-    digitalWrite(ledPin, LOW);
+    PORTD = B00000000;
   }
 }
