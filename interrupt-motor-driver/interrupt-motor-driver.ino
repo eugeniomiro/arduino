@@ -7,11 +7,11 @@ void setup() {
 }
 
 void loop() {
-  int btn = digitalRead(btnPin);
+  int btn = ((1 << btnPin) & PORTD) >> btnPin;
 
   if (btn == LOW) {
-    PORTD = B00100000;
+    PORTD = (1 << ledPin | PORTD);
   } else {
-    PORTD = B00000000;
+    PORTD = ~(1 << ledPin) & PORTD;
   }
 }
