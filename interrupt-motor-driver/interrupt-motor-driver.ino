@@ -2,8 +2,8 @@ const int btnPin = 2;
 const int ledPin = 5;
 
 void setup() {
-  pinMode(btnPin, INPUT_PULLUP);
-  pinMode(ledPin, OUTPUT);
+  DDRD  = B00100000;
+  PORTD = B00000100;
 }
 
 void loop() {
