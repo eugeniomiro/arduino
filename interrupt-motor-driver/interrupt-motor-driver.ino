@@ -7,11 +7,11 @@ void setup() {
 }
 
 void loop() {
-  int btn = ((1 << btnPin) & PORTD) >> btnPin;
+  int btn = (_BV(btnPin) & PORTD) >> btnPin;
 
   if (btn == LOW) {
-    PORTD = (1 << ledPin | PORTD);
+    PORTD = _BV(ledPin) | PORTD;
   } else {
-    PORTD = ~(1 << ledPin) & PORTD;
+    PORTD = ~_BV(ledPin) & PORTD;
   }
 }
