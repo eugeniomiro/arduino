@@ -2,12 +2,13 @@
 const uint8_t btnPin = 2;
 const uint8_t ledPin = 5;
 
-// Globals
-uint8_t led_state = LOW;
-
 void setup() {
-  pinMode(btnPin, INPUT_PULLUP);
-  pinMode(ledPin, OUTPUT);
+  // Set button pin to be input with pullup
+  DDRD &= ~(1 << btnPin);
+  PORTD |= (1 << btnPin);
+
+  // Set LED pin to be output
+  DDRD |= (1 << ledPin);
 
   attachInterrupt(digitalPinToInterrupt(btnPin), toggle, FALLING);
 }
@@ -18,6 +19,5 @@ void loop() {
 }
 
 void toggle() {
-  led_state = !led_state;
-  digitalWrite(ledPin, led_state);
+  PORTD ^= (1 << ledPin);
 }
