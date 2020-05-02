@@ -10,7 +10,15 @@ void setup() {
   // Set LED pin to be output
   DDRD |= (1 << ledPin);
 
-  attachInterrupt(digitalPinToInterrupt(btnPin), toggle, FALLING);
+  // Falling edge of INT0 generates interrupt
+  EICRA |= (1 << ISC01);
+  EICRA &= ~(1 << ISC00);
+
+  // Enable Interrupts for INT0
+  EIMSK |= (1 << INT0);
+
+  // Enable global interrupts
+  sei();
 }
 
 void loop() {
@@ -18,6 +26,6 @@ void loop() {
   delay(500);
 }
 
-void toggle() {
+ISR(INT0_vect) {
   PORTD ^= (1 << ledPin);
 }
