@@ -1,6 +1,6 @@
 int PULSADOR = 2;
 int LED = 3;
-int ESTADO;
+int ESTADO = LOW;
 
 void setup() {
 	pinMode(PULSADOR, INPUT);
