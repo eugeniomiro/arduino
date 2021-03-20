@@ -16,43 +16,57 @@ int adc_key_in = 0;
 int read_LCD_buttons() //  para leer los botones
 {
     adc_key_in = analogRead(0);
-    if (adc_key_in == 1023) return btnNONE;
-    if (adc_key_in == 639) return btnSELECT;
-    if (adc_key_in == 404) return btnLEFT;
-    if (adc_key_in == 98 || adc_key_in == 97) return btnUP;
-    if (adc_key_in == 252) return btnDOWN;
-    if (adc_key_in == 0) return btnRIGHT;
-    lcd.setCursor(0, 1);
-    lcd.print("boton: ");
-    lcd.print(adc_key_in);
+    if (adc_key_in > 1000) return btnNONE;
+    if (adc_key_in < 50) return btnRIGHT;
+    if (adc_key_in < 195) return btnUP;
+    if (adc_key_in < 380) return btnDOWN;
+    if (adc_key_in < 555) return btnLEFT;
+    if (adc_key_in < 790) return btnSELECT;
     return btnNONE;
 }
 
 void setup() {
     lcd.begin(16, 2);
     lcd.setCursor(0, 0);
+    lcd.print("Push the buttons");
+}
+
+void lcdPrintHora()
+{
+    lcd.setCursor(8, 1);
+    char time[9];
+
+    int h, m, s, sec = millis() / 1000;
+    h = (sec / 3600) % 24;
+    m = (sec / 60) % 60;
+    s = sec % 60;
+
+    sprintf(time, "%02d:%02d:%02d", h, m, s);
+    lcd.print(time);
 }
 
 void loop() {
+    lcdPrintHora();
     lcd.setCursor(0, 1);
     switch(read_LCD_buttons()){
         case btnSELECT:
-            lcd.print("select");
+            lcd.print("sel");
             break;
         case btnLEFT:
-            lcd.print("izquierda");
+            lcd.print("izq");
             break;
         case btnUP:
-            lcd.print("arriba");
+            lcd.print("arr");
             break;
         case btnDOWN:
-            lcd.print("abajo");
+            lcd.print("aba");
             break;
         case btnRIGHT:
-            lcd.print("derecha");
+            lcd.print("der");
             break;
         default:
-            lcd.clear();
+            lcd.print("   ");
+            lcd.setCursor(0, 1);
             break;
     }
     lcd.cursor();
