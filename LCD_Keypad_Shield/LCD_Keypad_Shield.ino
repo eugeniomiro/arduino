@@ -36,7 +36,8 @@ void lcdPrintHora()
     lcd.setCursor(8, 1);
     char time[9];
 
-    int h, m, s, sec = millis() / 1000;
+    unsigned long sec = millis() / 1000;
+    int h, m, s;
     h = (sec / 3600) % 24;
     m = (sec / 60) % 60;
     s = sec % 60;
