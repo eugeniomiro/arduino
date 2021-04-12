@@ -38,9 +38,7 @@ void loop() {
 
     oled.setTextSize(2);
     oled.setCursor(5, 2);
-    oled.print(millis() / 1000);
-    oled.setTextSize(1);
-    oled.print(" s");
+    printTime(millis() / 1000);
 
     oled.setCursor(5, 26);
     oled.print("T:");
@@ -58,4 +56,21 @@ void loop() {
     
     oled.display();
     delay(200);
+}
+
+void printTime(unsigned long sec) {
+    char time[9];
+
+    int d, h, m, s;
+    d = (sec / 3600) / 24;
+    h = (sec / 3600) % 24;
+    m = (sec / 60) % 60;
+    s = sec % 60;
+
+    if (d > 0) {
+        oled.print(d);
+        oled.print(":");
+    }
+    sprintf(time, "%02d:%02d:%02d", h, m, s);
+    oled.print(time);
 }
