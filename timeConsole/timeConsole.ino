@@ -3,13 +3,15 @@
 #include <Adafruit_SSD1306.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BMP280.h>
+#include <RTClib.h>
 
 #define ANCHO 128
 #define ALTO 64
 #define OLED_RESET 4
 
 Adafruit_SSD1306 oled(ANCHO, ALTO, &Wire, OLED_RESET);
-Adafruit_BMP280 bmp;
+Adafruit_BMP280  bmp;
+RTC_DS3231       rtc;
 
 float TEMPERATURA;
 float PRESION, P0;
@@ -24,6 +26,14 @@ void setup() {
         oled.print("BMP280 no encontrado!");
         while(1);
     }
+    if (!rtc.begin()){
+        oled.clearDisplay();
+        oled.setCursor(0, 0);
+	oled.setTextSize(2);
+        oled.print("rtc falló al inicializar!");
+        while(1);
+    }
+    //rtc.adjust(DateTime(__DATE__, __TIME__));
 }
 
 void loop() {
@@ -36,9 +46,9 @@ void loop() {
     oled.setCursor(0, 0);
     oled.setTextSize(1);
 
-    oled.setTextSize(2);
-    oled.setCursor(5, 2);
-    printTime(millis() / 1000);
+    oled.setTextSize(1);
+    oled.setCursor(0, 2);
+    printTime(rtc.now());
 
     oled.setCursor(5, 26);
     oled.print("T:");
@@ -58,19 +68,17 @@ void loop() {
     delay(200);
 }
 
-void printTime(unsigned long sec) {
-    char time[9];
+void printTime(DateTime now) {
+    char time[15];
 
-    int d, h, m, s;
-    d = (sec / 3600) / 24;
-    h = (sec / 3600) % 24;
-    m = (sec / 60) % 60;
-    s = sec % 60;
+    int d, M, y, h, m, s;
+    d = now.day();
+    M = now.month();
+    y = now.year();
+    h = now.hour();
+    m = now.minute();
+    s = now.second();
 
-    if (d > 0) {
-        oled.print(d);
-        oled.print(":");
-    }
-    sprintf(time, "%02d:%02d:%02d", h, m, s);
+    sprintf(time, "%d/%d/%d %02d:%02d:%02d  ", d, M, y, h, m, s);
     oled.print(time);
 }
