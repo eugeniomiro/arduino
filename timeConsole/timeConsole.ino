@@ -4,6 +4,7 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BMP280.h>
 #include <RTClib.h>
+#include <LiquidCrystal.h>
 
 #define ANCHO 128
 #define ALTO 64
@@ -12,6 +13,7 @@
 Adafruit_SSD1306 oled(ANCHO, ALTO, &Wire, OLED_RESET);
 Adafruit_BMP280  bmp;
 RTC_DS3231       rtc;
+LiquidCrystal    lcd(7, 6, 5, 4, 3, 2);
 
 float TEMPERATURA;
 float PRESION, P0;
@@ -34,6 +36,7 @@ void setup() {
         while(1);
     }
     //rtc.adjust(DateTime(__DATE__, __TIME__));
+    lcd.begin(20, 4);
 }
 
 void loop() {
@@ -48,7 +51,11 @@ void loop() {
 
     oled.setTextSize(1);
     oled.setCursor(0, 2);
-    printTime(rtc.now());
+
+    DateTime ya = rtc.now();
+    printTime(ya);
+    lcd.setCursor(0, 0);
+    printTimeLcd(ya);
 
     oled.setCursor(5, 26);
     oled.print("T:");
@@ -68,8 +75,8 @@ void loop() {
     delay(200);
 }
 
-void printTime(DateTime now) {
-    char time[15];
+String DateToString(DateTime now) {
+    char time[22];
 
     int d, M, y, h, m, s;
     d = now.day();
@@ -80,5 +87,14 @@ void printTime(DateTime now) {
     s = now.second();
 
     sprintf(time, "%d/%d/%d %02d:%02d:%02d  ", d, M, y, h, m, s);
-    oled.print(time);
+    return String(time);
 }
+
+void printTime(DateTime now) {
+    oled.print(DateToString(now));
+}
+
+void printTimeLcd(DateTime now) {
+    lcd.print(DateToString(now));
+}
+
